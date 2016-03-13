@@ -29,12 +29,15 @@ ID| 身高 | 體重 | 年齡 | BＭＩ
 
 ![alt text](https://upload.wikimedia.org/math/6/6/f/66f09b83e90b4ecda7ac612a08ff67b8.png)
 
-Y就是你的**類別**, 而這個方程式裡的ƒ為Function裡頭的w還有x分別為權重(Weight)還有(Feature)。而又等於每個Weight*Features。
+Y就是你的**類別**, 而這個方程式裡的ƒ為Function裡頭的w還有x分別為權重w(Weight)還有特徵x(Feature)。而一個Feature vector又等於ㄧ個(Weight*Features)。
+如果以上表來說Feature vector#1，Feature vector#2，Feature vector #3......每個Feature vector就包含該vector的資訊(身高，體重，年齡，BMI)。
 
-
-X*W就各自對應到各自的Ｙ。如下圖
+等類別定好之後(好比A,B,C,D等等)，就可以把每個Feature vector (x*w)就各自對應到各自的Ｙ。如下圖
 
 ![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Injection.svg/300px-Injection.svg.png)
+
+對應好之後我們就可以依造**類別(class)**來分類。
+
 
 好那你現在有基本了解了。那來做實驗吧。
 
@@ -143,6 +146,14 @@ simPLS  |     setosa | versicolor | virginica
 
 我們之後再來討論其他更高端的分類器，希望這個實驗課能帶給你許多收穫
 
+
+參考資料：
+1,[Logistic Regression](https://en.wikipedia.org/wiki/Logistic_regression)
+2,[LDA](https://en.wikipedia.org/wiki/Linear_discriminant_analysis)
+3,[PLS](https://en.wikipedia.org/wiki/Partial_least_squares_regression)
+4,[LDA VS. Logistic](http://math.arizona.edu/~hzhang/math574m/LogitOrLDA.pdf)
+5,好論文，[LDA+PLS降低維度新方法](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4018361/)
+6,[R 軟體的安裝與基本使用方法](https://www.youtube.com/watch?v=P1JgLk3t2bg)
 
 ```Python
 print("Author, Bob Chien")
