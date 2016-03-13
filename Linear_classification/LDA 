@@ -1,0 +1,136 @@
+#機器學習實驗
+
+
+##分類問題
+
+記得我們在第一章介紹時提過，機器學習有很多不同種的問題，其中最經典的就是分類問題。怎樣使用Classifier(**分類器**)去幫助你分析你手上的資料。這裡我們基本上使用**R**為基礎來進行我們的實驗。而怎樣使用**R**請參閱我們的**R**教學。
+
+
+##Linear Classifier(線性分類)
+
+線性分類器是最基本的機器學習技法之一，來複習一下前文，這是監督是學習，就是你把這個分類器用所有Label好的數據去訓練他以其舉一反三。基本上這個分類器的目標就是要分出**類別**(**class**)。線性分類器是如何決定類別的呢？基本上就是依靠你數據裡面的**Feature**的值的線性組合。
+
+###什麼是Features呢？
+
+Features就是你數據裡面的特徵。好比下表：
+
+ID| 身高 | 體重 | 年齡 | BＭＩ
+------|------|------|------|-------
+ A | 176  | 65   | 23   | 20.9  
+ B | 165  | 90   | 56   | 33  
+ C | 180  | 77   | 44   | 23.7 
+
+身高，體重，年齡皆為Features而BMI是結合式的Feature所以計算時要注意(之後會專文討論)。而每個Feature都有一個值但是對Ａ,B,Ｃ三者來說三者個是一個Feature vector。
+
+###怎樣分類？
+
+分類器的訓練是你先跟他講類別是什麼，他會依造Feature去學習然後轉換成模型也就是說把 **X-->Y**
+下圖方程式為完整說明什麼是**X-->Y**
+
+![alt text](https://upload.wikimedia.org/math/6/6/f/66f09b83e90b4ecda7ac612a08ff67b8.png)
+
+Y就是你的**類別**, 而這個方程式裡的ƒ為Function裡頭的w還有x分別為權重(Weight)還有(Feature)。而又等於每個Weight*Features。
+
+比如我們拿上表來談好了BMI超過24都算是過重所以很明顯ABC三者裡面B就是過重。我們假設過重為**Class1**不過重的為**Class2**也就是說：
+
++Class1 = Y1
+
++Class2 = Y2
+
+X*W就各自對應到各自的Ｙ。如下圖
+
+![alt text](https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Injection.svg/300px-Injection.svg.png)
+
+好那你現在有基本了解了。那來做實驗吧。
+
+以下有三種線性分類**Logistic Regreesion(羅濟斯提克)**, **Linear Discriminant Analysis(線性分類分析LDA)**, **Partial Least Squares Discriminant Analysis(偏最小平方分類分析PLS)**。
+
+我們使用鳶尾花(iris)檔案來做這個實驗。鳶尾花檔案為超級經典的檔案故事可以[這裡找](https://zh.wikipedia.org/wiki/%E5%AE%89%E5%BE%B7%E6%A3%AE%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%8D%89%E6%95%B0%E6%8D%AE%E9%9B%86)。
+
+首先我們來玩LDA。因為這個分類法最直觀。
+LDA分類法使用數據特徵的線性組合建立這個分類器
+```r
+# 導入library
+library(MASS)
+#導入數據(注意這裡使用內建的iris數據)
+data(iris)
+# 建立模型
+model <- lda(Species~., data=iris)
+# 模擬預測
+simLDA<- predict(model, iris[,1:4])$class
+# 看預測結果
+table(simLDA, iris$Species)
+```
+你可以看到結果這有兩個種比較難分，分別是versicolor & virginica。
+而setosa就比較沒有共同的特徵所以一下就被分出來。
+
+
+接著：Logistic Regression (注意：安裝[VGAM](https://cran.r-project.org/web/packages/VGAM/index.html)之前你要下載[bbmle](https://cran.r-project.org/web/packages/bbmle/index.html))
+
+Logistis Regression通常用來分兩種不同東西但是也可以調整算法支援兩種(multinominal)以上的分類。
+```r
+# 導入library
+library(VGAM)
+options(warn=-1)
+# 導入數據(注意這裡使用內建的iris數據)
+data(iris)
+#建立模型
+model <- vglm(Species~., family=multinomial, data=iris)
+# 模擬預測
+probabilities <- predict(model, iris[,1:4], type="response")
+simLogistic <- apply(probabilities, 1, which.max)
+simLogistic[which(simLogistic=="1")] <- levels(iris$Species)[1]
+simLogistic[which(simLogistic=="2")] <- levels(iris$Species)[2]
+simLogistic[which(simLogistic=="3")] <- levels(iris$Species)[3]
+# 看預測結果
+table(simLogistic, iris$Species)
+```
+Logistic Regression 在這個鳶尾花分類練習中表現比LDA好。
+
+
+最後就是PLS。首先先執行以下指令：
+
+install.packages("FinancialInstrument", repos="http://R-Forge.R-project.org")
+
+install.packages("blotter", repos="http://R-Forge.R-project.org")
+
+install.packages("quantstrat", repos="http://R-Forge.R-project.org")
+
+因為等等要執行的caret要依靠這些封包。並且也執行以下指令：
+
+install.packages('Rcpp', dependencies = TRUE)
+
+install.packages('ggplot2', dependencies = TRUE)
+
+install.packages('data.table', dependencies = TRUE)
+
+install.packages("pls")
+
+install.packages("klaR")
+
+好你可以開始玩PLS了
+
+PLS是**維度降低**的LDA，至於什麼是**降低維度**這之後會有專文討論。
+```r
+# 導入library
+library(caret)
+#導入數據(注意這裡使用內建的iris數據)
+data(iris)
+x <- iris[,1:4]
+y <- iris[,5]
+#建立模型
+model <- plsda(x, y, probMethod="Bayes")
+# 模擬預測
+simPLS <- predict(model, iris[,1:4])
+# 看預測結果
+table(simPLS, iris$Species)
+```
+你可以看到降低維度的分類器就表現不是那麼好是因為我們捨棄一些feature的線性組合值。在鳶尾花分類中，feature才沒多少個所以一旦降低維度就會造成巨大的影響導致結果不是很好看。
+
+我們之後再來討論其他更高端的分類器，希望這個實驗課能帶給你許多收穫
+
+
+```Python
+print("Author, Bob Chien")
+```
+
