@@ -56,6 +56,12 @@ simLDA<- predict(model, iris[,1:4])$class
 # 看預測結果
 table(simLDA, iris$Species)
 ```
+
+simLDA  |     setosa | versicolor | virginica
+ ----|----|----|----
+  setosa    |     50       |   0    |     0
+   versicolor  |    0     |    48    |     1
+   virginica    |   0    |      2     |   49
 你可以看到結果這有兩個種比較難分，分別是versicolor & virginica。
 而setosa就比較沒有共同的特徵所以一下就被分出來。
 
@@ -80,6 +86,12 @@ simLogistic[which(simLogistic=="3")] <- levels(iris$Species)[3]
 # 看預測結果
 table(simLogistic, iris$Species)
 ```
+
+simLogistic  |     setosa | versicolor | virginica
+ ----|----|----|----
+  setosa    |     50       |   0    |     0
+   versicolor  |    0     |    49    |     1
+   virginica    |   0    |      1     |   49
 Logistic Regression 在這個鳶尾花分類練習中表現比LDA好。
 
 
@@ -120,6 +132,13 @@ simPLS <- predict(model, iris[,1:4])
 # 看預測結果
 table(simPLS, iris$Species)
 ```
+
+simPLS  |     setosa | versicolor | virginica
+ ----|----|----|----
+  setosa    |     50       |   0    |     0
+   versicolor  |    0     |    45    |     3
+   virginica    |   0    |      5     |   47
+
 你可以看到降低維度的分類器就表現不是那麼好是因為我們捨棄一些feature的線性組合值。在鳶尾花分類中，feature才沒多少個所以一旦降低維度就會造成巨大的影響導致結果不是很好看。
 
 我們之後再來討論其他更高端的分類器，希望這個實驗課能帶給你許多收穫
