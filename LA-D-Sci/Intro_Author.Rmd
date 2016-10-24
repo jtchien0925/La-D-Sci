@@ -1,0 +1,6 @@
+---
+title: "李崢嶸 (Tiger Li)"
+output: html_document
+---
+
+生科系、流行病學研究所畢業，現於美國 Emroy 大學 Immunology and Molecular Pathogenesis 博士班。當兵後在中研院統計所打滾了兩年，一度在選擇 wet lab 或 dry lab 做 PhD 猶豫不決。回到實驗室的契機在於看到 data analytics / modeling 未來將對免疫學界產生的影響，遂決定以自己在數量方法上的專長為兩個說著不同語言的領域搭起橋樑。
